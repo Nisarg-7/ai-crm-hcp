@@ -14,6 +14,15 @@
 - Docs: ARCHITECTURE.md, TOOLS.md, copilot-instructions.md
 - QMS: big picture and the six-module story
 
-## Next: Day 2
-- Database models (User, HCP, Product, Interaction, FollowUp), seed data
-- QMS: Deviation Management
+## Day 2 (done)
+- Models: User, HCP, Product, Interaction, interaction_products (link table), FollowUp
+- Tables created with create_tables.py (create_all); verified in pgAdmin
+- core/security.py: bcrypt hash_password and verify_password
+- seed.py (re-runnable): 2 reps, 10 HCPs, 5 products, 6 interactions, 5 follow-ups
+- Demo logins: rep1@democrm.com and rep2@democrm.com, password Demo@1234
+- QMS: Deviation Management (docs/qms/02-deviation.md)
+
+## Next: Day 3
+- Pydantic schemas, JWT login, protected routes
+- HCP list/search and interaction CRUD endpoints
+- QMS: CAPA
