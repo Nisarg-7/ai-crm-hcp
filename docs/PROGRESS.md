@@ -22,7 +22,17 @@
 - Demo logins: rep1@democrm.com and rep2@democrm.com, password Demo@1234
 - QMS: Deviation Management (docs/qms/02-deviation.md)
 
-## Next: Day 3
-- Pydantic schemas, JWT login, protected routes
-- HCP list/search and interaction CRUD endpoints
-- QMS: CAPA
+## Day 3 (done)
+- core/security.py: JWT create and decode (PyJWT), settings for algorithm and expiry
+- Auth: POST /api/auth/login, GET /api/auth/me, get_current_user dependency (HTTPBearer)
+- Schemas: auth, hcp, product, interaction (Literal-validated types, extra=forbid)
+- Services: hcp_service (search), interaction_service (create, list, get, update), ServiceError
+- Routes: /api/hcps (list, search, detail), /api/interactions (POST, GET, GET by id, PATCH)
+- Rule: reps only see and edit their own interactions
+- Model change: Interaction.follow_ups relationship (back_populates)
+- QMS: CAPA (docs/qms/03-capa.md)
+
+## Next: Day 4
+- Products and follow-up endpoints, interaction history per HCP
+- Backend tests (pytest) for auth, HCP search and interactions
+- QMS: Supplier Management

@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from sqlalchemy import Column, DateTime, ForeignKey, String, Table, Text, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -7,6 +8,9 @@ from app.core.database import Base
 from app.models.hcp import HCP
 from app.models.product import Product
 from app.models.user import User
+
+if TYPE_CHECKING:
+    from app.models.follow_up import FollowUp
 
 interaction_products = Table(
     "interaction_products",
@@ -45,4 +49,9 @@ class Interaction(Base):
 
     rep: Mapped[User] = relationship()
     hcp: Mapped[HCP] = relationship()
+
     products: Mapped[list[Product]] = relationship(secondary=interaction_products)
+    follow_ups: Mapped[list["FollowUp"]] = relationship(
+        back_populates="interaction", cascade="all, delete-orphan"
+    )
+    

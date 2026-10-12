@@ -7,6 +7,8 @@ class Settings(BaseSettings):
     groq_api_key: str = ""
     groq_model: str = "openai/gpt-oss-120b"
     groq_fallback_model: str = "openai/gpt-oss-20b"
+    jwt_algorithm: str = "HS256"
+    access_token_expire_minutes: int = 480
     cors_origins: str = "http://localhost:5173"
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")

@@ -21,4 +21,4 @@ class FollowUp(Base):
         DateTime(timezone=True), server_default=func.now()
     )
 
-    interaction: Mapped[Interaction] = relationship()
+    interaction: Mapped[Interaction] = relationship(back_populates="follow_ups")
