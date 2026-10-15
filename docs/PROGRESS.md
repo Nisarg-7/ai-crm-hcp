@@ -32,7 +32,16 @@
 - Model change: Interaction.follow_ups relationship (back_populates)
 - QMS: CAPA (docs/qms/03-capa.md)
 
-## Next: Day 4
-- Products and follow-up endpoints, interaction history per HCP
-- Backend tests (pytest) for auth, HCP search and interactions
-- QMS: Supplier Management
+## Day 4 (done)
+- Frontend: axios interceptor attaches JWT from localStorage
+- Redux: authSlice (login, fetchMe, logout), registered in the store
+- Pages: LoginPage (loading and error states), HomePage
+- Components: ProtectedRoute (redirects, restores session on refresh), Layout (top bar, logout)
+- Routing: React Router in App.jsx, BrowserRouter in main.jsx
+- First run of backend and frontend together; login flow verified end to end
+- QMS: Supplier Management (docs/qms/04-supplier-management.md)
+
+## Next: Day 5
+- HCP list and search page, HCP detail with interaction history
+- Redux slices for hcps and interactions
+- QMS: Product Complaints
