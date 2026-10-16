@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { Outlet } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
 import { logout } from '../store/authSlice';
 
 export default function Layout() {
@@ -9,7 +9,13 @@ export default function Layout() {
   return (
     <div>
       <header className="topbar">
-        <strong className="brand">AI-First CRM</strong>
+        <div className="topbar-left">
+          <strong className="brand">AI-First CRM</strong>
+          <nav className="nav">
+            <NavLink to="/" end>Home</NavLink>
+            <NavLink to="/hcps">HCPs</NavLink>
+          </nav>
+        </div>
         <div className="topbar-right">
           <span className="muted">Welcome, {user?.full_name}</span>
           <button

@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchHealth } from '../store/healthSlice';
+import { Link } from 'react-router-dom';
 
 export default function HomePage() {
   const dispatch = useDispatch();
@@ -15,6 +16,7 @@ export default function HomePage() {
     <div>
       <h1>Welcome, {user?.full_name}</h1>
       <p className="muted">Territory: {user?.territory || 'Not assigned'}</p>
+            <p><Link to="/hcps">Browse HCPs &rarr;</Link></p>
 
       <div className="card">
         <h2>System status</h2>

@@ -41,7 +41,14 @@
 - First run of backend and frontend together; login flow verified end to end
 - QMS: Supplier Management (docs/qms/04-supplier-management.md)
 
-## Next: Day 5
-- HCP list and search page, HCP detail with interaction history
-- Redux slices for hcps and interactions
-- QMS: Product Complaints
+## Day 5 (done)
+- Redux: hcpsSlice (list and selected HCP), interactionsSlice (history per HCP)
+- hooks/useDebounce (300 ms search debounce)
+- Pages: HcpListPage (search, loading, error and empty states), HcpDetailPage (info plus interaction history, follow-ups, badges)
+- Routing: /hcps and /hcps/:id inside the protected layout; NavLink navigation bar
+- QMS: Product Complaints (docs/qms/05-product-complaints.md)
+
+## Next: Day 6
+- Log Interaction screen: structured form (HCP picker, type, date, sentiment, products, follow-ups)
+- products endpoint and Redux slice
+- QMS: Adverse Event Reporting
