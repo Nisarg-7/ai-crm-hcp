@@ -48,7 +48,15 @@
 - Routing: /hcps and /hcps/:id inside the protected layout; NavLink navigation bar
 - QMS: Product Complaints (docs/qms/05-product-complaints.md)
 
-## Next: Day 6
-- Log Interaction screen: structured form (HCP picker, type, date, sentiment, products, follow-ups)
-- products endpoint and Redux slice
-- QMS: Adverse Event Reporting
+## Day 6 (done)
+- Backend: GET /api/products (protected)
+- Redux: productsSlice; interactionsSlice extended with createInteraction (422 error mapping, resetCreate)
+- Components: LogInteractionForm (HCP picker, type, date, sentiment, products, summary, notes, dynamic follow-ups)
+- Page: LogInteractionPage with tabs (Structured Form active, AI Conversation placeholder), route and nav link
+- Form state is local (useState); Redux is used on submit only
+- QMS: Adverse Event Reporting (docs/qms/06-adverse-events.md)
+
+## Next: Day 7 (weekend)
+- Interaction history page and edit interaction (PATCH) in the UI
+- Week 1 cleanup, backend tests (pytest) for auth, HCPs and interactions
+- QMS: Recall Management

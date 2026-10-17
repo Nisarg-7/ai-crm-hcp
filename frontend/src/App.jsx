@@ -5,6 +5,7 @@ import HcpDetailPage from './pages/HcpDetailPage';
 import HcpListPage from './pages/HcpListPage';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
+import LogInteractionPage from './pages/LogInteractionPage';
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/hcps" element={<HcpListPage />} />
           <Route path="/hcps/:id" element={<HcpDetailPage />} />
+          <Route path="/log-interaction" element={<LogInteractionPage />} />
         </Route>
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

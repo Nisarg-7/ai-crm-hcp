@@ -14,6 +14,7 @@ export default function Layout() {
           <nav className="nav">
             <NavLink to="/" end>Home</NavLink>
             <NavLink to="/hcps">HCPs</NavLink>
+            <NavLink to="/log-interaction">Log Interaction</NavLink>
           </nav>
         </div>
         <div className="topbar-right">

@@ -18,6 +18,8 @@ export default function HomePage() {
       <p className="muted">Territory: {user?.territory || 'Not assigned'}</p>
             <p><Link to="/hcps">Browse HCPs &rarr;</Link></p>
 
+            <p><Link to="/log-interaction">Log an interaction &rarr;</Link></p>
+
       <div className="card">
         <h2>System status</h2>
         {status === 'loading' && <p>Checking...</p>}

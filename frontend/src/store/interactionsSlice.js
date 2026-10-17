@@ -14,14 +14,45 @@ export const fetchInteractions = createAsyncThunk(
   }
 );
 
+export const createInteraction = createAsyncThunk(
+  'interactions/create',
+  async (payload, { rejectWithValue }) => {
+    try {
+      const { data } = await api.post('/interactions', payload);
+      return data;
+    } catch (err) {
+      const status = err.response?.status;
+      const detail = err.response?.data?.detail;
+      if (status === 422 && Array.isArray(detail) && detail.length > 0) {
+        const first = detail[0];
+        const field = first.loc?.[first.loc.length - 1] ?? 'input';
+        return rejectWithValue(`Invalid ${field}: ${first.msg}`);
+      }
+      if (typeof detail === 'string') {
+        return rejectWithValue(detail);
+      }
+      return rejectWithValue('Could not save the interaction. Please try again.');
+    }
+  }
+);
+
 const interactionsSlice = createSlice({
   name: 'interactions',
   initialState: {
     list: [],
     status: 'idle',
     error: null,
+    createStatus: 'idle',
+    createError: null,
+    lastCreated: null,
   },
-  reducers: {},
+  reducers: {
+    resetCreate(state) {
+      state.createStatus = 'idle';
+      state.createError = null;
+      state.lastCreated = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchInteractions.pending, (state) => {
@@ -36,8 +67,22 @@ const interactionsSlice = createSlice({
       .addCase(fetchInteractions.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload || 'Unknown error';
+      })
+      .addCase(createInteraction.pending, (state) => {
+        state.createStatus = 'loading';
+        state.createError = null;
+        state.lastCreated = null;
+      })
+      .addCase(createInteraction.fulfilled, (state, action) => {
+        state.createStatus = 'succeeded';
+        state.lastCreated = action.payload;
+      })
+      .addCase(createInteraction.rejected, (state, action) => {
+        state.createStatus = 'failed';
+        state.createError = action.payload || 'Could not save the interaction.';
       });
   },
 });
 
+export const { resetCreate } = interactionsSlice.actions;
 export default interactionsSlice.reducer;
