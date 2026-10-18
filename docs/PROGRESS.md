@@ -56,7 +56,14 @@
 - Form state is local (useState); Redux is used on submit only
 - QMS: Adverse Event Reporting (docs/qms/06-adverse-events.md)
 
-## Next: Day 7 (weekend)
-- Interaction history page and edit interaction (PATCH) in the UI
-- Week 1 cleanup, backend tests (pytest) for auth, HCPs and interactions
-- QMS: Recall Management
+## Day 7 (done)
+- Redux: interactionsSlice extended with fetchInteractionById, updateInteraction, resetUpdate; shared mapError helper
+- Pages: EditInteractionPage (HCP and follow-ups read-only, PATCH sends editable fields), MyInteractionsPage
+- Routing: /interactions and /interactions/:id/edit; Edit links on history cards; nav link
+- Backend tests (pytest): separate crm_hcp_test database with a safety guard, fixtures (make_user, make_hcp, make_product, auth_headers), 28 tests for health, auth, HCPs and interactions
+- QMS: Recall Management (docs/qms/07-recall.md). All six core modules covered.
+
+## Next: Day 8 (Week 2 begins)
+- LangGraph and Groq: first working agent, tool-calling test against openai/gpt-oss-120b
+- Finalize the tool list and agent architecture (docs/TOOLS.md)
+- QMS: how the modules connect (08) and the qms README index

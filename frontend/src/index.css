@@ -100,3 +100,13 @@ input[type="checkbox"] { padding: 0; width: auto; }
 .tab:hover { color: #1f2937; }
 .tab-active { color: #2563eb; border-bottom-color: #2563eb; }
 .tab-disabled, .tab-disabled:hover { color: #9ca3af; cursor: not-allowed; }
+
+
+.readonly-value { margin: 0; padding: 10px 12px; background: #f3f4f6; border-radius: 8px; font-size: 15px; }
+
+.edit-link { margin-left: auto; font-size: 14px; font-weight: 500; color: #2563eb; text-decoration: none; }
+.edit-link:hover { text-decoration: underline; }
+
+
+.hcp-link { font-weight: 600; color: #1f2937; text-decoration: none; }
+.hcp-link:hover { color: #2563eb; text-decoration: underline; }

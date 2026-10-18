@@ -70,6 +70,7 @@ export default function HcpDetailPage() {
               <span className={`badge badge-${item.sentiment}`}>{item.sentiment}</span>
             )}
             {item.source === 'ai_chat' && <span className="badge badge-ai">AI chat</span>}
+            <Link to={`/interactions/${item.id}/edit`} className="edit-link">Edit</Link>
           </div>
 
           {item.summary && <p>{item.summary}</p>}
