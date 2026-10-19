@@ -222,3 +222,5 @@ __marimo__/
 node_modules/
 dist/
 .vscode/
+
+backend/scratch_*.py

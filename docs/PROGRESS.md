@@ -63,7 +63,14 @@
 - Backend tests (pytest): separate crm_hcp_test database with a safety guard, fixtures (make_user, make_hcp, make_product, auth_headers), 28 tests for health, auth, HCPs and interactions
 - QMS: Recall Management (docs/qms/07-recall.md). All six core modules covered.
 
-## Next: Day 8 (Week 2 begins)
-- LangGraph and Groq: first working agent, tool-calling test against openai/gpt-oss-120b
-- Finalize the tool list and agent architecture (docs/TOOLS.md)
-- QMS: how the modules connect (08) and the qms README index
+## Day 8 (done)
+- Installed langgraph and langchain-groq; Groq key verified
+- Scratch tests (git-ignored): direct Groq call, tool-calling test, minimal LangGraph agent (agent node, tool node, tools_condition loop)
+- Findings: gpt-oss-120b picks tools reliably, handles two-step requests, asks when details are missing; invented "meeting" as a type until Literal typing was used; repeated searches with a dummy tool (fix: system prompt and step limit)
+- Design point: tools must resolve HCP names to ids and return clarifying text on zero or multiple matches
+- docs/TOOLS.md finalized (5 tools plus optional suggest_next_action)
+- QMS: how modules connect (08) and docs/qms/README.md index. QMS series complete.
+
+## Next: Day 9
+- Build the real agent package (backend/app/agent): tools, system prompt, graph
+- Real log_interaction and search_hcp tools using the existing services
