@@ -71,6 +71,16 @@
 - docs/TOOLS.md finalized (5 tools plus optional suggest_next_action)
 - QMS: how modules connect (08) and docs/qms/README.md index. QMS series complete.
 
-## Next: Day 9
-- Build the real agent package (backend/app/agent): tools, system prompt, graph
-- Real log_interaction and search_hcp tools using the existing services
+## Day 9 (done)
+- backend/app/agent package: prompts.py (system prompt with current date), resolvers.py (HCP and product name to database row), tools.py (build_tools), graph.py (build_agent, run_agent)
+- Tools built so far: search_hcp, log_interaction. Both use the existing services; rep_id and db come from a closure, so the LLM cannot choose a rep
+- log_interaction safety chain: resolve HCP, resolve products, validate with InteractionCreate, save via create_interaction with source "ai_chat"; failures return text to the LLM
+- Graph: system prompt on every call, recursion limit of 12, fallback to gpt-oss-20b, friendly error if everything fails
+- hcp_service.search_hcps: fallback to 5-letter word stems so "cardiologists" finds "Cardiology"
+- Prompt rule for "this Friday" vs "next Friday"
+- Tests: 43 passing (resolvers, both tools, run_agent failure and fallback, using no real LLM calls)
+- Note: scratch_run.py saved a few real AI-chat interactions for rep 1 in crm_hcp (harmless demo data)
+
+## Next: Day 10
+- edit_interaction, get_interaction_history and schedule_followup tools
+- Tests for the new tools
