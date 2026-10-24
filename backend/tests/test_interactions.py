@@ -185,3 +185,27 @@ def test_rep_cannot_see_or_edit_another_reps_interaction(
     assert client.get("/api/interactions", headers=headers_b).json() == []
     # the owner still sees it
     assert client.get(f"/api/interactions/{interaction_id}", headers=headers_a).status_code == 200
+
+
+def test_add_follow_up_service(db, make_user, make_hcp):
+    from datetime import date
+
+    from app.schemas.interaction import FollowUpCreate, InteractionCreate
+    from app.services import interaction_service
+
+    user = make_user()
+    hcp = make_hcp()
+    created = interaction_service.create_interaction(
+        db,
+        user.id,
+        InteractionCreate(
+            hcp_id=hcp.id,
+            interaction_type="visit",
+            interaction_date="2026-10-12T10:00:00Z", #type: ignore 
+        ),
+    )
+    updated = interaction_service.add_follow_up(
+        db, user.id, created.id, FollowUpCreate(description="Call back", due_date=date(2026, 10, 30))
+    )
+    assert len(updated.follow_ups) == 1
+    assert updated.follow_ups[0].description == "Call back"

@@ -2,7 +2,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload
 
 from app.models import HCP, FollowUp, Interaction, Product
-from app.schemas.interaction import InteractionCreate, InteractionUpdate
+from app.schemas.interaction import FollowUpCreate, InteractionCreate, InteractionUpdate
 from app.services.errors import ServiceError
 
 
@@ -86,5 +86,22 @@ def update_interaction(
             continue  # these columns are required, so ignore an explicit null
         setattr(interaction, field, value)
 
+    db.commit()
+    return get_interaction(db, rep_id, interaction_id)
+
+
+def add_follow_up(
+    db: Session, rep_id: int, interaction_id: int, data: FollowUpCreate
+) -> Interaction:
+    interaction = get_interaction(db, rep_id, interaction_id)
+    for existing in interaction.follow_ups:
+        if (
+            existing.description.strip().lower() == data.description.strip().lower()
+            and existing.due_date == data.due_date
+        ):
+            raise ServiceError("This follow-up already exists on that interaction", 409)
+    interaction.follow_ups.append(
+        FollowUp(description=data.description, due_date=data.due_date)
+    )
     db.commit()
     return get_interaction(db, rep_id, interaction_id)

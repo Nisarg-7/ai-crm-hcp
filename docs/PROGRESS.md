@@ -81,6 +81,17 @@
 - Tests: 43 passing (resolvers, both tools, run_agent failure and fallback, using no real LLM calls)
 - Note: scratch_run.py saved a few real AI-chat interactions for rep 1 in crm_hcp (harmless demo data)
 
-## Next: Day 10
-- edit_interaction, get_interaction_history and schedule_followup tools
-- Tests for the new tools
+## Day 10 (done)
+- interaction_service.add_follow_up (with a duplicate guard that raises a 409 ServiceError)
+- Tools added in agent/tools.py: get_interaction_history, edit_interaction, schedule_followup. All five required tools now exist: log_interaction, edit_interaction, search_hcp, get_interaction_history, schedule_followup
+- edit and follow-up tools take an HCP name and an optional interaction id; without an id they use that HCP's most recent interaction and report which one
+- Edits go through InteractionUpdate (cannot change the HCP, cannot delete); no delete tool by design
+- System prompt extended: edit and follow-up rules, history-first for older interactions, no deleting
+- Real-agent run verified all five tools in a multi-turn chat; a Groq 429 (8000 tokens per minute on the free tier) was handled by the fallback model
+- Finding: each request sends system prompt, tool descriptions and the whole history, so the chat screen must cap the history sent (about the last 10 messages)
+- Tests: all passing (history, edit, ownership, follow-up, duplicate guard, bad dates)
+
+## Next: Day 11
+- POST /api/agent/chat endpoint (JWT-protected, takes the conversation, calls run_agent)
+- Cap history length, input validation, error handling
+- Tests for the endpoint with a fake agent

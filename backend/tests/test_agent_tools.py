@@ -134,3 +134,18 @@ def test_log_interaction_bad_followup_date_not_saved(db, make_user, make_hcp):
         }
     )
     assert "YYYY-MM-DD" in result
+
+
+def _log_one(db, user, tool_log, **extra):
+    args = {"hcp_name": "Kapoor", "interaction_type": "visit"}
+    args.update(extra)
+    return tool_log.invoke(args)
+
+
+def test_history_tool_lists_and_handles_empty(db, make_user, make_hcp):
+    user = make_user()
+    make_hcp(full_name="Dr. Rohan Kapoor")
+    make_hcp(full_name="Dr. Empty")
+    tools = build_tools(db, user.id)
+    log = get_tool(tools, "log_interaction")
+    history = get_tool
