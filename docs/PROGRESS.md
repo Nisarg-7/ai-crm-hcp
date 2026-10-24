@@ -91,7 +91,14 @@
 - Finding: each request sends system prompt, tool descriptions and the whole history, so the chat screen must cap the history sent (about the last 10 messages)
 - Tests: all passing (history, edit, ownership, follow-up, duplicate guard, bad dates)
 
-## Next: Day 11
-- POST /api/agent/chat endpoint (JWT-protected, takes the conversation, calls run_agent)
-- Cap history length, input validation, error handling
-- Tests for the endpoint with a fake agent
+## Day 11 (done)
+- schemas/agent.py: ChatMessage (roles limited to user and assistant, no blank content, max 4000 chars), ChatRequest (last message must be from the user, max 50 messages, extra fields forbidden), ChatResponse
+- api/routes/agent.py: POST /api/agent/chat, JWT-protected; trims history to the last 10 messages and drops leading assistant messages; rep id comes only from the token
+- Route calls graph.run_agent through the module so tests can swap in a fake agent
+- Verified in Swagger: search, multi-turn memory, 422 on system role, last message from assistant, blank message, and no login
+- Tests: chat route tests (auth, rep id, trimming, validation, unknown field, LLM failure gives friendly reply), all passing
+- Note: a transient OSError on .env during pytest was fixed by opening a fresh terminal
+
+## Next: Day 12
+- Frontend: chat Redux slice, chat UI, enable the AI Conversation tab
+- Show the structured result of what the agent saved
