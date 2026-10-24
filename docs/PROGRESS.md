@@ -99,6 +99,14 @@
 - Tests: chat route tests (auth, rep id, trimming, validation, unknown field, LLM failure gives friendly reply), all passing
 - Note: a transient OSError on .env during pytest was fixed by opening a fresh terminal
 
-## Next: Day 12
-- Frontend: chat Redux slice, chat UI, enable the AI Conversation tab
-- Show the structured result of what the agent saved
+## Day 12 (done)
+- Redux: chatSlice (messages, status, error; sendMessage, retryLast, clearChat), registered in the store
+- Components: ChatPanel (message bubbles, typing indicator, example chips, Enter to send, error box with Retry, New chat)
+- LogInteractionPage: AI Conversation tab (default) and Structured Form tab; both stay mounted and the inactive one is hidden, so the conversation survives tab switches
+- Chat sends the full conversation each time; the backend trims it to the last 10 messages
+- Verified end to end: search, log by chat, edit by chat, missing details, retry after a server error
+
+## Next: Day 13
+- Show what the agent saved as a structured card in the chat
+- Refresh HCP and interaction data after the agent changes something
+- Chat polish: rate-limit message, long replies

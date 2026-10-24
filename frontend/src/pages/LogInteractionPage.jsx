@@ -1,8 +1,9 @@
 import { useState } from 'react';
+import ChatPanel from '../components/ChatPanel';
 import LogInteractionForm from '../components/LogInteractionForm';
 
 export default function LogInteractionPage() {
-  const [tab, setTab] = useState('form');
+  const [tab, setTab] = useState('chat');
 
   return (
     <div>
@@ -12,22 +13,26 @@ export default function LogInteractionPage() {
       <div className="tabs">
         <button
           type="button"
+          className={`tab ${tab === 'chat' ? 'tab-active' : ''}`}
+          onClick={() => setTab('chat')}
+        >
+          AI Conversation
+        </button>
+        <button
+          type="button"
           className={`tab ${tab === 'form' ? 'tab-active' : ''}`}
           onClick={() => setTab('form')}
         >
           Structured Form
         </button>
-        <button
-          type="button"
-          className="tab tab-disabled"
-          disabled
-          title="Coming in Week 2"
-        >
-          AI Conversation (coming soon)
-        </button>
       </div>
 
-      {tab === 'form' && <LogInteractionForm />}
+      <div style={{ display: tab === 'chat' ? 'block' : 'none' }}>
+        <ChatPanel />
+      </div>
+      <div style={{ display: tab === 'form' ? 'block' : 'none' }}>
+        <LogInteractionForm />
+      </div>
     </div>
   );
 }
