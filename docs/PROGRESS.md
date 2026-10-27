@@ -106,7 +106,15 @@
 - Chat sends the full conversation each time; the backend trims it to the last 10 messages
 - Verified end to end: search, log by chat, edit by chat, missing details, retry after a server error
 
-## Next: Day 13
-- Show what the agent saved as a structured card in the chat
-- Refresh HCP and interaction data after the agent changes something
-- Chat polish: rate-limit message, long replies
+## Day 13 (done)
+- Tools record events (logged, edited, follow_up_added) only after a successful save
+- run_agent returns (reply, events); no fallback retry once something was already saved (prevents duplicate saves)
+- POST /api/agent/chat returns actions: cards built from the saved database rows (never from model text), scoped to the logged-in rep
+- Frontend: chatSlice stores cards on assistant messages and strips them before sending; InteractionCard component with links to history and edit
+- Tests updated for the new return shape, plus tests for cards and rep isolation
+- Data refresh needed no code: list and detail pages refetch on mount
+
+## Next: Day 14 (weekend)
+- Full-flow testing and bug fixing, loading and empty states, rate-limit handling
+- Dashboard or home page polish
+- Frontend tests for the main flows

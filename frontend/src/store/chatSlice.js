@@ -15,10 +15,17 @@ function mapChatError(err) {
   return 'The assistant had a problem. Please retry.';
 }
 
+// The API accepts only role and content, so strip anything else (like cards)
+function toApiMessages(messages) {
+  return messages.map((m) => ({ role: m.role, content: m.content }));
+}
+
 async function postConversation(messages, rejectWithValue) {
   try {
-    const { data } = await api.post('/agent/chat', { messages });
-    return data.reply;
+    const { data } = await api.post('/agent/chat', {
+      messages: toApiMessages(messages),
+    });
+    return { reply: data.reply, actions: data.actions || [] };
   } catch (err) {
     return rejectWithValue(mapChatError(err));
   }
@@ -63,7 +70,11 @@ const chatSlice = createSlice({
         state.error = null;
       })
       .addCase(sendMessage.fulfilled, (state, action) => {
-        state.messages.push({ role: 'assistant', content: action.payload });
+        state.messages.push({
+          role: 'assistant',
+          content: action.payload.reply,
+          actions: action.payload.actions,
+        });
         state.status = 'idle';
       })
       .addCase(sendMessage.rejected, (state, action) => {
@@ -75,7 +86,11 @@ const chatSlice = createSlice({
         state.error = null;
       })
       .addCase(retryLast.fulfilled, (state, action) => {
-        state.messages.push({ role: 'assistant', content: action.payload });
+        state.messages.push({
+          role: 'assistant',
+          content: action.payload.reply,
+          actions: action.payload.actions,
+        });
         state.status = 'idle';
       })
       .addCase(retryLast.rejected, (state, action) => {

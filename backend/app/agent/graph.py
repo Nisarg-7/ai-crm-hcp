@@ -18,8 +18,13 @@ MAX_STEPS = 12
 FRIENDLY_ERROR = "Sorry, the assistant is unavailable right now. Please try again, or use the form."
 
 
-def build_agent(db: Session, rep_id: int, model_name: str | None = None):
-    tools = build_tools(db, rep_id)
+def build_agent(
+    db: Session,
+    rep_id: int,
+    model_name: str | None = None,
+    events: list[dict] | None = None,
+):
+    tools = build_tools(db, rep_id, events)
     llm = ChatGroq(
         model=model_name or settings.groq_model,
         api_key=SecretStr(settings.groq_api_key),
@@ -48,24 +53,36 @@ def _final_text(messages: list[BaseMessage]) -> str:
     return "I could not produce a reply. Please try again."
 
 
-def run_agent(db: Session, rep_id: int, history: list[tuple[str, str]]) -> str:
-    """history is a list of (role, text) pairs, role being 'user' or 'assistant'."""
+def run_agent(
+    db: Session, rep_id: int, history: list[tuple[str, str]]
+) -> tuple[str, list[dict]]:
+    """history is a list of (role, text) pairs. Returns (reply, events)."""
     messages: list[BaseMessage] = [
         HumanMessage(content=text) if role == "user" else AIMessage(content=text)
         for role, text in history
     ]
     for model_name in (settings.groq_model, settings.groq_fallback_model):
+        events: list[dict] = []
         try:
-            agent = build_agent(db, rep_id, model_name)
+            agent = build_agent(db, rep_id, model_name, events)
             result = agent.invoke(
-                MessagesState(messages=messages), # type: ignore
+                MessagesState(messages=messages), #type: ignore 
                 {"recursion_limit": MAX_STEPS},
-            ) 
-            return _final_text(result["messages"])
+            )
+            return _final_text(result["messages"]), events
         except GraphRecursionError:
             logger.warning("Agent hit the step limit")
-            return "I got stuck on that request. Could you rephrase it or give more detail?"
+            return (
+                "I got stuck on that request. Could you rephrase it or give more detail?",
+                events,
+            )
         except Exception:
             logger.exception("Agent failed with model %s", model_name)
             db.rollback()
-    return FRIENDLY_ERROR
+            if events:
+                # Something was already saved before the failure; don't retry and duplicate it.
+                return (
+                    "Something went wrong after saving. Please check My Interactions before retrying.",
+                    events,
+                )
+    return FRIENDLY_ERROR, []

@@ -32,5 +32,18 @@ class ChatRequest(BaseModel):
         return value
 
 
+class InteractionCard(BaseModel):
+    action: Literal["logged", "edited", "follow_up_added"]
+    interaction_id: int
+    hcp_id: int
+    hcp_name: str
+    interaction_type: str
+    interaction_date: str
+    sentiment: str | None = None
+    products: list[str] = []
+    follow_ups: list[str] = []
+
+
 class ChatResponse(BaseModel):
     reply: str
+    actions: list[InteractionCard] = []

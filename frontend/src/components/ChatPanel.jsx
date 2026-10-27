@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearChat, retryLast, sendMessage } from '../store/chatSlice';
+import InteractionCard from './InteractionCard';
 
 const EXAMPLES = [
   'Find me cardiologists',
@@ -68,9 +69,15 @@ export default function ChatPanel() {
           </div>
         )}
 
-        {messages.map((m, index) => (
+                {messages.map((m, index) => (
           <div key={index} className={`bubble-row bubble-row-${m.role}`}>
-            <div className={`bubble bubble-${m.role}`}>{m.content}</div>
+            <div className="bubble-stack">
+              <div className={`bubble bubble-${m.role}`}>{m.content}</div>
+              {m.actions &&
+                m.actions.map((card) => (
+                  <InteractionCard key={card.interaction_id} card={card} />
+                ))}
+            </div>
           </div>
         ))}
 

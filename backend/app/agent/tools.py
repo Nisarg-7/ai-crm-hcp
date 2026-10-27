@@ -24,7 +24,10 @@ def format_interaction(i) -> str:
         f"summary: {i.summary or 'none'} | follow-ups: {follow_ups}"
     )
 
-def build_tools(db: Session, rep_id: int) -> list:
+def build_tools(db: Session, rep_id: int, events: list[dict] | None = None) -> list:
+    def record(kind: str, interaction_id: int) -> None:
+        if events is not None:
+            events.append({"type": kind, "interaction_id": interaction_id})
     @tool
     def search_hcp(query: str) -> str:
         """Find Healthcare Professionals by name, specialty, city or hospital.
@@ -105,7 +108,8 @@ def build_tools(db: Session, rep_id: int) -> list:
             logger.exception("log_interaction failed")
             db.rollback()
             return "Not saved. Something went wrong on our side. Tell the rep to try again."
-
+        
+        record("logged", saved.id)
         products = ", ".join(p.name for p in saved.products) or "none"
         return (
             f"Saved interaction #{saved.id}: {saved.interaction_type} with "
@@ -205,7 +209,7 @@ def build_tools(db: Session, rep_id: int) -> list:
             logger.exception("edit_interaction failed")
             db.rollback()
             return "Not changed. Something went wrong on our side. Tell the rep to try again."
-
+        record("edited", saved.id)
         return "Updated interaction:\n" + format_interaction(saved)
 
 
@@ -254,7 +258,8 @@ def build_tools(db: Session, rep_id: int) -> list:
             logger.exception("schedule_followup failed")
             db.rollback()
             return "Not saved. Something went wrong on our side. Tell the rep to try again."
-
+        
+        record("follow_up_added", saved.id)
         return (
             f"Follow-up added to interaction #{saved.id} with {hcp.full_name} "
             f"({saved.interaction_date:%Y-%m-%d}): {data.description}, due {due or 'no date'}."
