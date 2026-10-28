@@ -114,7 +114,14 @@
 - Tests updated for the new return shape, plus tests for cards and rep isolation
 - Data refresh needed no code: list and detail pages refetch on mount
 
-## Next: Day 14 (weekend)
-- Full-flow testing and bug fixing, loading and empty states, rate-limit handling
-- Dashboard or home page polish
-- Frontend tests for the main flows
+## Day 14 (done)
+- Groq rate limit (429) detected specifically: run_agent returns RATE_LIMIT_MESSAGE; test added
+- Dashboard: GET /api/dashboard (counts, 5 recent interactions, 5 open follow-ups, own data only), dashboard_service, schemas, 4 tests
+- Frontend: dashboardSlice and a dashboard home page (stat tiles, recent interactions, follow-ups, system status)
+- Frontend tests (Vitest, Testing Library, jsdom): setup, renderWithProviders helper, login, chat panel and form tests (10 passing); scrollIntoView stubbed for jsdom
+- Manual full-flow checklist completed
+
+## Next: Day 15 (Week 3 begins)
+- README with architecture, tools, setup and screenshots
+- Deployment prep: Dockerfile or start command, production config, CORS
+- Deploy backend (Render), database (Neon), frontend (Vercel)

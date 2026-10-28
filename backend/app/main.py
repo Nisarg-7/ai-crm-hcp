@@ -3,7 +3,7 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes import agent, auth, health, hcps, interactions, products 
+from app.api.routes import agent, auth, dashboard, health, hcps, interactions, products 
 from app.core.config import settings
 
 logging.basicConfig(level=logging.INFO)
@@ -24,3 +24,4 @@ app.include_router(hcps.router, prefix="/api")
 app.include_router(interactions.router, prefix="/api")
 app.include_router(products.router, prefix="/api")
 app.include_router(agent.router, prefix="/api")
+app.include_router(dashboard.router, prefix="/api")

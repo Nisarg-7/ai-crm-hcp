@@ -8,6 +8,8 @@ from langgraph.prebuilt import ToolNode, tools_condition
 from pydantic import SecretStr
 from sqlalchemy.orm import Session
 
+from groq import RateLimitError
+
 from app.agent.prompts import build_system_prompt
 from app.agent.tools import build_tools
 from app.core.config import settings
@@ -16,6 +18,8 @@ logger = logging.getLogger(__name__)
 
 MAX_STEPS = 12
 FRIENDLY_ERROR = "Sorry, the assistant is unavailable right now. Please try again, or use the form."
+
+RATE_LIMIT_MESSAGE = "The assistant is busy right now (usage limit reached). Please wait about a minute and try again, or use the Structured Form."
 
 
 def build_agent(
@@ -61,6 +65,7 @@ def run_agent(
         HumanMessage(content=text) if role == "user" else AIMessage(content=text)
         for role, text in history
     ]
+    rate_limited = False
     for model_name in (settings.groq_model, settings.groq_fallback_model):
         events: list[dict] = []
         try:
@@ -76,7 +81,7 @@ def run_agent(
                 "I got stuck on that request. Could you rephrase it or give more detail?",
                 events,
             )
-        except Exception:
+        except Exception as err:
             logger.exception("Agent failed with model %s", model_name)
             db.rollback()
             if events:
@@ -85,4 +90,5 @@ def run_agent(
                     "Something went wrong after saving. Please check My Interactions before retrying.",
                     events,
                 )
-    return FRIENDLY_ERROR, []
+            rate_limited = isinstance(err, RateLimitError)
+    return (RATE_LIMIT_MESSAGE if rate_limited else FRIENDLY_ERROR), []

@@ -2,6 +2,9 @@ from langchain_core.messages import AIMessage
 
 from app.agent import graph
 
+import httpx
+from groq import RateLimitError
+
 
 def test_run_agent_returns_friendly_message_when_llm_fails(db, make_user, monkeypatch):
     user = make_user()
@@ -58,3 +61,18 @@ def test_run_agent_does_not_retry_after_something_was_saved(db, make_user, monke
     assert len(tried) == 1
     assert "check My Interactions" in reply
     assert events == [{"type": "logged", "interaction_id": 1}]
+
+
+def test_run_agent_rate_limit_gives_specific_message(db, make_user, monkeypatch):
+    user = make_user()
+
+    def limited(*args, **kwargs):
+        response = httpx.Response(
+            429, request=httpx.Request("POST", "https://api.groq.com/test")
+        )
+        raise RateLimitError("rate limit", response=response, body=None)
+
+    monkeypatch.setattr(graph, "build_agent", limited)
+    reply, events = graph.run_agent(db, user.id, [("user", "hello")])
+    assert reply == graph.RATE_LIMIT_MESSAGE
+    assert events == []

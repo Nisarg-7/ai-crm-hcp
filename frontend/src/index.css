@@ -150,3 +150,16 @@ input[type="checkbox"] { padding: 0; width: auto; }
 .result-links { display: flex; gap: 16px; margin-top: 10px; }
 .result-links a { color: #2563eb; font-weight: 500; text-decoration: none; }
 .result-links a:hover { text-decoration: underline; }
+
+
+.quick-actions { display: flex; gap: 12px; margin: 16px 0 24px; }
+.quick-btn { margin-top: 0; text-decoration: none; display: inline-block; }
+
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.stat { display: flex; flex-direction: column; gap: 4px; }
+.stat-number { font-size: 32px; font-weight: 700; color: #2563eb; }
+
+.dash-columns { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.dash-columns h2 { margin: 0 0 12px; font-size: 18px; }
+.dash-row { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; padding: 8px 0; border-bottom: 1px solid #f3f4f6; font-size: 14px; }
+.status-card { font-size: 14px; }
