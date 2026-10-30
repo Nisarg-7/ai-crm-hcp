@@ -1,0 +1,60 @@
+/* ---------- layout ---------- */
+.app-shell { min-height: 100vh; background: var(--bg); color: var(--text); }
+.app-main { margin-left: var(--sidebar-width); min-height: 100vh; display: flex; flex-direction: column; }
+.app-content { flex: 1; width: 100%; max-width: 1100px; margin: 0 auto; padding: var(--space-5); }
+
+/* ---------- sidebar ---------- */
+.sidebar {
+  position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-width);
+  background: var(--surface); border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; padding: var(--space-4); z-index: 40;
+}
+.sidebar-brand { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-2) var(--space-2) var(--space-5); }
+.brand-mark { width: 34px; height: 34px; border-radius: var(--radius-sm); background: var(--accent); color: var(--accent-contrast); display: inline-flex; align-items: center; justify-content: center; }
+.brand-name { font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+
+.sidebar-nav { display: flex; flex-direction: column; gap: var(--space-1); flex: 1; }
+.side-link {
+  display: flex; align-items: center; gap: var(--space-3);
+  padding: 10px var(--space-3); border-radius: var(--radius-sm);
+  color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500;
+}
+.side-link:hover { background: var(--surface-2); color: var(--text); }
+.side-link.active { background: var(--accent-soft); color: var(--accent); }
+
+.sidebar-user { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-2) 0; border-top: 1px solid var(--border); }
+.avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+.sidebar-user-text { display: flex; flex-direction: column; min-width: 0; font-size: 13px; }
+.sidebar-user-text strong, .sidebar-user-text .muted { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.sidebar-backdrop { display: none; }
+
+/* ---------- top bar (overrides the old Day 4 rules) ---------- */
+.topbar {
+  position: sticky; top: 0; z-index: 30; height: var(--topbar-height);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 var(--space-5); background: var(--bg); border-bottom: 1px solid var(--border);
+}
+.topbar-left, .topbar-right { display: flex; align-items: center; gap: var(--space-3); }
+.topbar-title { margin: 0; font-size: 17px; font-weight: 600; }
+
+.icon-btn {
+  width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center;
+  background: transparent; color: var(--muted); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); cursor: pointer;
+}
+.icon-btn:hover { background: var(--surface-2); color: var(--text); }
+.menu-btn { display: none; }
+
+/* ---------- mobile ---------- */
+@media (max-width: 860px) {
+  .app-main { margin-left: 0; }
+  .app-content { padding: var(--space-4); }
+  .topbar { padding: 0 var(--space-4); }
+  .menu-btn { display: inline-flex; }
+
+  .sidebar { transform: translateX(-100%); transition: transform 0.2s ease; box-shadow: var(--shadow-lg); }
+  .sidebar-open { transform: translateX(0); }
+  .sidebar-backdrop { display: block; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.45); z-index: 35; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
+  .sidebar-backdrop-visible { opacity: 1; pointer-events: auto; }
+}

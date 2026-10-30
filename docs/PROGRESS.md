@@ -121,7 +121,18 @@
 - Frontend tests (Vitest, Testing Library, jsdom): setup, renderWithProviders helper, login, chat panel and form tests (10 passing); scrollIntoView stubbed for jsdom
 - Manual full-flow checklist completed
 
-## Next: Day 15 (Week 3 begins)
-- README with architecture, tools, setup and screenshots
-- Deployment prep: Dockerfile or start command, production config, CORS
-- Deploy backend (Render), database (Neon), frontend (Vercel)
+## Redesign decisions
+- Name: HCP Sync. Palette: warm oatmeal light (#F7F4EE), charcoal dark (#161616), one sage-teal accent (#3F5E5A, lighter #7FA39D in dark)
+- Modern SaaS layout: fixed sidebar on desktop, hamburger on mobile; light and dark theme with a toggle
+- Plain CSS with design tokens; lucide-react for icons only. No charts, no registration, no backend changes
+- Demo login stays visible on the login page
+
+## Day 15 (done)
+- Installed lucide-react (npm audit fix cleared a zod advisory)
+- styles/tokens.css (light and dark tokens), hooks/useTheme.js (saved choice, system default, no-flash script in index.html)
+- components: Sidebar, Topbar, new Layout (app shell); styles/shell.css with mobile drawer
+- Known leftover: page contents still use old hard-coded colors (white cards in dark mode); migrated on Days 16 and 17
+
+## Next: Day 16
+- Move index.css onto the tokens (fixes dark mode everywhere)
+- Restyle login page, dashboard, HCP list and detail

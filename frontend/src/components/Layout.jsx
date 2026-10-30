@@ -1,37 +1,26 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { NavLink, Outlet } from 'react-router-dom';
-import { logout } from '../store/authSlice';
+import { useState } from 'react';
+import { Outlet } from 'react-router-dom';
+import useTheme from '../hooks/useTheme';
+import Sidebar from './Sidebar';
+import Topbar from './Topbar';
 
 export default function Layout() {
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.user);
+  const { theme, toggleTheme } = useTheme();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div>
-      <header className="topbar">
-        <div className="topbar-left">
-          <strong className="brand">AI-First CRM</strong>
-          <nav className="nav">
-            <NavLink to="/" end>Home</NavLink>
-            <NavLink to="/hcps">HCPs</NavLink>
-            <NavLink to="/log-interaction">Log Interaction</NavLink>
-            <NavLink to="/interactions" end>My Interactions</NavLink>
-          </nav>
-        </div>
-        <div className="topbar-right">
-          <span className="muted">Welcome, {user?.full_name}</span>
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={() => dispatch(logout())}
-          >
-            Logout
-          </button>
-        </div>
-      </header>
-      <main className="page">
-        <Outlet />
-      </main>
+    <div className="app-shell">
+      <Sidebar open={menuOpen} onClose={() => setMenuOpen(false)} />
+      <div className="app-main">
+        <Topbar
+          theme={theme}
+          onToggleTheme={toggleTheme}
+          onMenu={() => setMenuOpen(true)}
+        />
+        <main className="app-content">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 }
