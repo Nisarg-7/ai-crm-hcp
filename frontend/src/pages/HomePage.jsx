@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { CalendarClock, ClipboardList, MessageSquarePlus, Stethoscope, TrendingUp } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchDashboard } from '../store/dashboardSlice';
@@ -10,6 +11,28 @@ function formatDate(value) {
     month: 'short',
     year: 'numeric',
   });
+}
+
+function DashboardSkeleton() {
+  return (
+    <>
+      <div className="stat-grid">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="skeleton skeleton-tile" />
+        ))}
+      </div>
+      <div className="dash-columns">
+        {[0, 1].map((i) => (
+          <div key={i} className="card">
+            <div className="skeleton skeleton-line" style={{ width: '40%' }} />
+            <div className="skeleton skeleton-line" />
+            <div className="skeleton skeleton-line" />
+            <div className="skeleton skeleton-line" />
+          </div>
+        ))}
+      </div>
+    </>
+  );
 }
 
 export default function HomePage() {
@@ -26,30 +49,43 @@ export default function HomePage() {
   return (
     <div>
       <h1>Welcome, {user?.full_name}</h1>
-      <p className="muted">Territory: {user?.territory || 'Not assigned'}</p>
+      <p className="muted page-sub">Territory: {user?.territory || 'Not assigned'}</p>
 
       <div className="quick-actions">
-        <Link to="/log-interaction" className="btn quick-btn">Log an interaction</Link>
-        <Link to="/hcps" className="btn btn-secondary quick-btn">Browse HCPs</Link>
+        <Link to="/log-interaction" className="btn quick-btn">
+          <MessageSquarePlus size={16} /> Log an interaction
+        </Link>
+        <Link to="/hcps" className="btn btn-secondary quick-btn">
+          <Stethoscope size={16} /> Browse HCPs
+        </Link>
       </div>
 
-      {status === 'loading' && !data && <p className="muted">Loading dashboard...</p>}
+      {status === 'loading' && !data && <DashboardSkeleton />}
       {status === 'failed' && <p className="bad">{error}</p>}
 
       {data && (
         <>
           <div className="stat-grid">
             <div className="card stat">
-              <span className="stat-number">{data.counts.total_interactions}</span>
-              <span className="muted">Total interactions</span>
+              <span className="stat-icon"><ClipboardList size={20} /></span>
+              <span className="stat-text">
+                <span className="stat-number">{data.counts.total_interactions}</span>
+                <span className="muted">Total interactions</span>
+              </span>
             </div>
             <div className="card stat">
-              <span className="stat-number">{data.counts.last_7_days}</span>
-              <span className="muted">Last 7 days</span>
+              <span className="stat-icon"><TrendingUp size={20} /></span>
+              <span className="stat-text">
+                <span className="stat-number">{data.counts.last_7_days}</span>
+                <span className="muted">Last 7 days</span>
+              </span>
             </div>
             <div className="card stat">
-              <span className="stat-number">{data.counts.open_follow_ups}</span>
-              <span className="muted">Open follow-ups</span>
+              <span className="stat-icon"><CalendarClock size={20} /></span>
+              <span className="stat-text">
+                <span className="stat-number">{data.counts.open_follow_ups}</span>
+                <span className="muted">Open follow-ups</span>
+              </span>
             </div>
           </div>
 
@@ -57,7 +93,7 @@ export default function HomePage() {
             <div className="card">
               <h2>Recent interactions</h2>
               {data.recent_interactions.length === 0 && (
-                <p className="muted">Nothing logged yet.</p>
+                <p className="muted">Nothing logged yet. Use "Log an interaction" to start.</p>
               )}
               {data.recent_interactions.map((i) => (
                 <div key={i.id} className="dash-row">

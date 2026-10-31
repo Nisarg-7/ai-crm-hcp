@@ -133,6 +133,13 @@
 - components: Sidebar, Topbar, new Layout (app shell); styles/shell.css with mobile drawer
 - Known leftover: page contents still use old hard-coded colors (white cards in dark mode); migrated on Days 16 and 17
 
-## Next: Day 16
-- Move index.css onto the tokens (fixes dark mode everywhere)
-- Restyle login page, dashboard, HCP list and detail
+## Day 16 (done)
+- index.css moved fully onto design tokens: cards, inputs, buttons, badges, chat bubbles and tabs now follow light and dark themes (no more white cards in dark mode)
+- Login page restyled (logo, subtitle, theme toggle, demo box; demo credentials stay visible)
+- Dashboard restyled: icon stat tiles, skeleton loaders, empty states
+- HCP list (search icon, initials avatars, skeletons) and HCP detail (large avatar, contact icons, styled history) restyled
+- Checked at phone width using browser device mode; frontend tests still 10 passing
+
+## Next: Day 17
+- Restyle Log Interaction (form and chat), My Interactions and Edit pages
+- Result cards and empty states polish

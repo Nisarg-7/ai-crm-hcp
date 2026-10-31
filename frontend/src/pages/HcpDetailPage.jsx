@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { ArrowLeft, Building2, Mail, Phone } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import { fetchHcpById } from '../store/hcpsSlice';
@@ -10,6 +11,16 @@ function formatDate(value) {
     month: 'short',
     year: 'numeric',
   });
+}
+
+function initials(name) {
+  return (name || '?')
+    .replace(/^Dr\.?\s+/i, '')
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0].toUpperCase())
+    .join('');
 }
 
 export default function HcpDetailPage() {
@@ -24,36 +35,61 @@ export default function HcpDetailPage() {
   }, [id, dispatch]);
 
   if (selectedStatus === 'loading' || selectedStatus === 'idle') {
-    return <p className="muted">Loading HCP...</p>;
+    return (
+      <div>
+        <div className="skeleton" style={{ height: 110, marginBottom: 24 }} />
+        <div className="skeleton" style={{ height: 90 }} />
+      </div>
+    );
   }
 
   if (selectedStatus === 'failed') {
     return (
       <div>
         <p className="bad">{selectedError}</p>
-        <Link to="/hcps">Back to HCP list</Link>
+        <Link to="/hcps" className="back-link">
+          <ArrowLeft size={16} /> Back to HCP list
+        </Link>
       </div>
     );
   }
 
   return (
     <div>
-      <Link to="/hcps" className="back-link">&larr; Back to HCP list</Link>
+      <Link to="/hcps" className="back-link">
+        <ArrowLeft size={16} /> Back to HCP list
+      </Link>
 
       <div className="card hcp-header">
-        <h1>{selected.full_name}</h1>
-        <p className="hcp-specialty">{selected.specialty || 'Specialty not set'}</p>
-        <p className="muted">
-          {[selected.organization, selected.city].filter(Boolean).join(', ')}
-        </p>
-        <p className="muted">
-          {selected.email || 'No email'} &middot; {selected.phone || 'No phone'}
-        </p>
+        <span className="hcp-avatar hcp-avatar-lg">{initials(selected.full_name)}</span>
+        <div>
+          <h1>{selected.full_name}</h1>
+          <p className="hcp-specialty">{selected.specialty || 'Specialty not set'}</p>
+          <p className="muted hcp-contact">
+            <span>
+              <Building2 size={14} />
+              {[selected.organization, selected.city].filter(Boolean).join(', ') || 'No organization'}
+            </span>
+            <span>
+              <Mail size={14} />
+              {selected.email || 'No email'}
+            </span>
+            <span>
+              <Phone size={14} />
+              {selected.phone || 'No phone'}
+            </span>
+          </p>
+        </div>
       </div>
 
       <h2>Interaction history</h2>
 
-      {status === 'loading' && <p className="muted">Loading interactions...</p>}
+      {status === 'loading' && (
+        <>
+          <div className="skeleton" style={{ height: 90, marginBottom: 12 }} />
+          <div className="skeleton" style={{ height: 90 }} />
+        </>
+      )}
       {status === 'failed' && <p className="bad">{error}</p>}
       {status === 'succeeded' && list.length === 0 && (
         <p className="muted">No interactions logged with this HCP yet.</p>
